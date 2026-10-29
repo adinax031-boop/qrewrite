@@ -1,0 +1,11 @@
+{
+  "qubits": 2,
+  "gates": [
+    {"name": "h", "qubits": [0]},
+    {"name": "x", "qubits": [1]},
+    {"name": "h", "qubits": [0]},
+    {"name": "p", "qubits": [1], "angle": "1/4"},
+    {"name": "p", "qubits": [1], "angle": "3/4"},
+    {"name": "cx", "qubits": [0, 1]}
+  ]
+}

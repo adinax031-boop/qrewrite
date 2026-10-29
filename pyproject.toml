@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qrewrite"
+version = "0.1.0"
+description = "Auditable quantum circuit rewriting and numerical verification"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+[project.scripts]
+qrewrite = "qrewrite:main"
+
+[tool.setuptools]
+py-modules = ["qrewrite"]
