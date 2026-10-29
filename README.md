@@ -56,3 +56,16 @@ Tests cover fixed identities, dependency blockers, exact phase fusion, global-ph
 This is a small gate-count optimizer, not a hardware-aware synthesis system: it lacks OpenQASM/Cirq integration, ancilla handling, routing, realistic cost models, formal verification, and an official competition harness. Useful next steps are independently checking against a second simulator, benchmarking real circuits, and connecting to the official competition verifier before drawing performance conclusions.
 
 MIT license.
+
+## QASM compiler and linear hardware topology
+
+The `compiler` module accepts a deliberately strict OpenQASM 2 subset, emits QASM, performs gate rewrites, and optionally routes CNOTs to a bidirectional line. For example:
+
+```sh
+python -m compiler circuit.qasm -o compiled.qasm --topology line --verify
+# after installation: qrewrite-compile circuit.qasm -o compiled.qasm --topology line --verify
+```
+
+The JSON report separates input, logical optimization and routed metrics. Line routing inserts three-CNOT SWAPs and reverses them after each remote CNOT, restoring the identity logical/physical layout even for entangled states. This is correct but conservative; routing can substantially increase CNOT count. The supported QASM subset is a single `qreg q[N]` and `h`, `x`, `z`, `s`, `sdg`, `t`, `tdg`, `cx`, and `u1`/`p` with rational multiples of π. Unsupported syntax, measurements, conditional operations, parameter expressions, register names, and gates fail explicitly. The output uses `u1`, which is defined in `qelib1.inc`.
+
+`test_compiler.py` needs NumPy and compares the compiler against an independent dense-matrix implementation on 120 seeded random circuits under both all-to-all and line topology, as well as every directed pair in lines of 2–5 qubits. Install test dependencies with `python -m pip install '.[test]'`. Full unitary verification remains exponential and is restricted to six qubits by default. The compiler still lacks a production deployment history, full OpenQASM support, calibrated hardware cost models, industrial-strength routing, formal verification, and official competition integration; do not treat these tests as evidence that it meets those requirements.
