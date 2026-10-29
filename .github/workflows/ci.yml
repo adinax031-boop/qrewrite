@@ -11,5 +11,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
+      - run: python -m pip install ".[test]"
       - run: python -m unittest -v
-      - run: python -m qrewrite example.json -o /tmp/optimized.json --verify
+      - run: python -m compiler example.qasm -o /tmp/compiled.qasm --topology line --verify
